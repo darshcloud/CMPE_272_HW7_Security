@@ -1,5 +1,6 @@
-# CMPE 272 HW7 Security
+# CMPE 272 HW 7 Security
 
+## Problem Statement
 Design and build a PKI infrastructure that includes Root CA, Signing CA, and TLS Certificate,
 E.g., as described here: https://pki-tutorial.readthedocs.io/en/latest/simple/.
 Use the TLS certificate to install a web server, e.g. tomcat, https://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html.
