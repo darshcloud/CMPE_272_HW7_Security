@@ -55,6 +55,46 @@ openssl ca \ <br/>
     -in ca/signing-ca.csr \ <br/>
     -out ca/signing-ca.crt \ <br/>
     -extensions signing_ca_ext <br/>
+### Step 6
+Operate Signing CA
+* Creating TLS server request with the below commands
+SAN=DNS:www.simple.org \ <br/>
+openssl req -new \ <br/>
+    -config etc/server.conf \ <br/>
+    -out certs/simple.org.csr \ <br/>
+    -keyout certs/simple.org.key <br/>
+* Creating TLS server certificate using the below commands
+openssl ca \ <br/>
+    -config etc/signing-ca.conf \ <br/>
+    -in certs/simple.org.csr \ <br/>
+    -out certs/simple.org.crt \ <br/>
+    -extensions server_ext <br/>
+### Step 7 
+Using the TLS certificate install Apache Tomcat webserver <br/>
+Link for the commands to be executed https://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html <br/>
+Install JRE and JDK on ec2 instance using the below commands<br/>
+sudo apt update <br/>
+sudo apt install default-jre <br/>
+sudo apt install default-jdk <br/>
+javac -version <br/>
+* Preparing Keystore <br/>
+keytool -import -alias root-ca -keystore certs/simple_org.jks -trustcacerts -file ca/root-ca.crt <br/>
+keytool -import -alias signing-ca -keystore certs/simple_org.jks -trustcacerts -file ca/signing-ca.crt <br/>
+* Generate Certificate-Server key pair <br/>
+openssl pkcs12 -export -name "tomcat" -inkey certs/simple.org.key -in certs/simple.org.crt -out certs/simple.org.p12<br/><br/>
+In the conf file of tomcat installation directory add the SSL configuration changes in server.xml file <br/><br/>
+![image](https://user-images.githubusercontent.com/111547793/201504017-3c10f9bd-8763-4db8-8ed2-8c2b55349146.png) <br/><br/>
+![Picture1](https://user-images.githubusercontent.com/111547793/201504068-07171715-3c21-45aa-9e47-fafa32a3e39b.png)<br/><br/>
+![Picture2](https://user-images.githubusercontent.com/111547793/201504071-bee36780-16c2-44ed-a5a2-3847ad958196.png)<br/><br/>
+
+
+
+
+
+
+
+
+
 
 
 
